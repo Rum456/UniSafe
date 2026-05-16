@@ -16,3 +16,26 @@ UniSafe is a full stack web application designed for student safety management. 
 - Git & GitHub (Version Control)
 
 ## 📂 Project Structure
+UniSafe/
+│── backend/
+│── frontend/
+│── README.md
+
+
+## ⚙️ How to Run Project
+
+### Backend
+```bash
+cd backend
+npm install
+npm start
+
+### Frontend
+cd frontend
+npm install
+npm start
+
+Git workflow
+git add .
+git commit -m "message"
+git push origin main
