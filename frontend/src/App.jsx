@@ -1,17 +1,112 @@
-import { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import Login from "./Login";
-import Sidebar from "./Sidebar";
-import Profile from "./pages/Profile";
-import SOS from "./pages/SOS";
 
 
+function Sidebar() {
+  const navigate = useNavigate();
 
-function App() {
-  const token = localStorage.getItem("token");
+  return (
+    <div
+      style={{
+        width: "220px",
+        height: "100vh",
+        background: "#0f172a",
+        padding: "20px",
+        color: "white",
+      }}
+    >
+      <h2>🚀 UniSafe</h2>
+
+      <button onClick={() => navigate("/dashboard")}>
+        Dashboard
+      </button>
+
+      <br /><br />
+
+      <button onClick={() => navigate("/profile")}>
+        Profile
+      </button>
+
+      <br /><br />
+
+      <button onClick={() => navigate("/sos")}>
+        SOS
+      </button>
+
+
+      <br /><br />
+
+<button
+  style={{
+    width: "100%",
+    padding: "10px",
+    background: "red",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+  }}
+  onClick={() => {
+    localStorage.removeItem("token");
+    navigate("/");
+  }}
+>
+  Logout
+</button>
+    </div>
+  );
+}
+
+function Dashboard() {
+  return (
+    <div style={{ display: "flex" }}>
+      <Sidebar />
+
+      <div style={{ padding: "20px" }}>
+        <h1>📊 Dashboard Working ✅</h1>
+      </div>
+    </div>
+  );
+}
+
+function Profile() {
+  return (
+    <div style={{ display: "flex" }}>
+      <Sidebar />
+
+      <div style={{ padding: "20px" }}>
+        <h1>👤 Profile Working ✅</h1>
+      </div>
+    </div>
+  );
+}
+
+function SOS() {
+  return (
+    <div style={{ display: "flex" }}>
+      <Sidebar />
+
+      <div style={{ padding: "20px" }}>
+        <h1>🚨 SOS Working ✅</h1>
+      </div>
+    </div>
+  );
+}
+
+function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<LoginPage />} />
+     <Route
+  path="/"
+  element={
+    <Login
+      onLogin={() => {
+        window.location.href = "/dashboard";
+      }}
+    />
+  }
+/>
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/sos" element={<SOS />} />
@@ -19,114 +114,11 @@ function App() {
   );
 }
 
-/* LOGIN */
-function LoginPage() {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, []);
-
-  const handleLogin = () => {
-    navigate("/dashboard");
-  };
-
-  return <Login onLogin={handleLogin} />;
-}
-
-/* DASHBOARD */
-function Dashboard() {
-  const [email, setEmail] = useState("");
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
-
- useEffect(() => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    navigate("/");
-    return;
-  }
-
-  fetch("http://localhost:5000/", {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => {
-      if (!res.ok) {
-        localStorage.removeItem("token");
-        navigate("/");
-      }
-    })
-    .catch(() => {
-      localStorage.removeItem("token");
-      navigate("/");
-    })
-    .finally(() => {
-      setLoading(false);   // ✅ ALWAYS runs
-    });
-}, []);
-  if (loading) {
-    return <h2 style={{ textAlign: "center" }}>Loading...</h2>;
-  }
-
-return (
-  <div style={{ display: "flex" }}>
-    <Sidebar />
-
-    <div style={{ marginLeft: "220px", padding: "20px" }}>
-      <h1>📊 Dashboard</h1>
-
-      <h3>Welcome 👋 {email}</h3>
-
-      <button
-        onClick={() => {
-          localStorage.removeItem("token");
-          navigate("/");
-        }}
-        style={{
-          padding: "10px",
-          background: "red",
-          color: "white",
-          border: "none",
-          borderRadius: "8px",
-          marginTop: "20px",
-          cursor: "pointer",
-        }}
-      >
-        Logout
-      </button>
-    </div>
-  </div>
-);
-}
-
-/* PROFILE */
-function Profile() {
+function App() {
   return (
-    <div style={{ display: "flex" }}>
-      <Sidebar />
-      <div style={{ marginLeft: "220px", padding: "20px" }}>
-        <h1>👤 Profile</h1>
-      </div>
-    </div>
-  );
-}
-
-/* SOS */
-function SOS() {
-  return (
-    <div style={{ display: "flex" }}>
-      <Sidebar />
-      <div style={{ marginLeft: "220px", padding: "20px" }}>
-        <h1>🚨 SOS</h1>
-      </div>
-    </div>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   );
 }
 
