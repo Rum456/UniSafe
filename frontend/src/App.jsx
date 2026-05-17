@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import Sidebar from "./Sidebar";
+import Profile from "./pages/Profile";
+import SOS from "./pages/SOS";
+
+
 
 function App() {
   const token = localStorage.getItem("token");
