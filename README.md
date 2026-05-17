@@ -1,4 +1,4 @@
-# UniSafe Project
+# UniSafe Project - Women Safety Web Application
 
 ## 📌 Project Description
 UniSafe is a full stack web application designed for student safety management. It includes frontend and backend integration.
