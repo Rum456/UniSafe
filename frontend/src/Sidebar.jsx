@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 function Sidebar() {
   const navigate = useNavigate();
 
@@ -9,8 +11,7 @@ function Sidebar() {
         background: "#0f172a",
         padding: "20px",
         color: "white",
-        display: "flex",
-        flexDirection: "column",
+        position: "fixed",
       }}
     >
       <h2>🚀 UniSafe</h2>
@@ -19,37 +20,30 @@ function Sidebar() {
         Dashboard
       </button>
 
-      <br />
+      <br /><br />
 
       <button onClick={() => navigate("/profile")}>
         Profile
       </button>
 
-      <br />
+      <br /><br />
 
       <button onClick={() => navigate("/sos")}>
         SOS
       </button>
 
-      <div style={{ marginTop: "auto" }}>
-        <button
-          style={{
-            width: "100%",
-            padding: "10px",
-            background: "red",
-            color: "white",
-            border: "none",
-            borderRadius: "6px",
-            cursor: "pointer",
-          }}
-          onClick={() => {
-            localStorage.removeItem("token");
-            navigate("/");
-          }}
-        >
-          Logout
-        </button>
-      </div>
+      <br /><br />
+
+      <button
+        onClick={() => {
+          localStorage.removeItem("token");
+          navigate("/");
+        }}
+      >
+        Logout
+      </button>
     </div>
   );
 }
+
+export default Sidebar;

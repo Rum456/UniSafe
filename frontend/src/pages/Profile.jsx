@@ -1,9 +1,21 @@
+import Sidebar from "../Sidebar";
+
 function Profile() {
   return (
-    <div>
-      <h1>Profile Page</h1>
-      <p>Name: User</p>
-      <p>Email: user@gmail.com</p>
+    <div style={{ display: "flex" }}>
+      <Sidebar />
+
+      <div
+        style={{
+          marginLeft: "240px",
+          padding: "30px",
+        }}
+      >
+        <h1>👤 Profile</h1>
+
+        <p>Name: Admin User</p>
+        <p>Email: admin@gmail.com</p>
+      </div>
     </div>
   );
 }

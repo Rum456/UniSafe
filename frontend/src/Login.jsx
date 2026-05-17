@@ -1,118 +1,120 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Login({ onLogin }) {
+function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  const handleLogin = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
 
-    console.log("Login button clicked");
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
 
-    try {
-      const response = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const data = await response.json();
 
-      console.log("Response received");
+    if (response.ok) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("name", data.name || "Admin User");
+localStorage.setItem("email", data.email || email);
 
-      // ✅ SAFE RESPONSE HANDLING (IMPORTANT FIX)
-      const text = await response.text();
-      console.log("RAW TEXT:", text);
-
-      const data = JSON.parse(text);
-      console.log("PARSED DATA:", data);
-
-      console.log("STATUS:", response.status);
-      console.log("TOKEN:", data.token);
-
-      // ✅ SAVE TOKEN
-      if (data.token) {
-        localStorage.setItem("token", data.token);
-        console.log("TOKEN SAVED:", data.token);
-
-        alert("Login successful");
-        onLogin();
-      } else {
-        console.log("NO TOKEN RECEIVED");
-        alert(data.message || "Login failed");
-      }
-
-    } catch (error) {
-      console.log("ERROR:", error);
-      alert("Server not reachable");
+      navigate("/dashboard");
+    } else {
+      alert(data.message);
     }
-  };
+  } catch (error) {
+    console.log(error);
+    alert("Server Error");
+  }
+};
 
   return (
-    <div style={styles.container}>
-      <div style={styles.box}>
-        <h1>🔐 UniSafe Login</h1>
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#f1f5f9",
+      }}
+    >
+      <div
+        style={{
+          width: "350px",
+          background: "white",
+          padding: "35px",
+          borderRadius: "15px",
+          boxShadow: "0 0 15px rgba(0,0,0,0.1)",
+        }}
+      >
+        <h1
+          style={{
+            textAlign: "center",
+            marginBottom: "25px",
+            color: "#0f172a",
+          }}
+        >
+          🚀 UniSafe Login
+        </h1>
 
-        <form onSubmit={handleLogin} style={styles.form}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={styles.input}
-          />
+        <input
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "15px",
+            borderRadius: "8px",
+            border: "1px solid #cbd5e1",
+            fontSize: "15px",
+          }}
+        />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={styles.input}
-          />
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          style={{
+            width: "100%",
+            padding: "12px",
+            marginBottom: "20px",
+            borderRadius: "8px",
+            border: "1px solid #cbd5e1",
+            fontSize: "15px",
+          }}
+        />
 
-          <button type="submit" style={styles.button}>
-            Login
-          </button>
-        </form>
+        <button
+          onClick={handleLogin}
+          style={{
+            width: "100%",
+            padding: "12px",
+            background: "#2563eb",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            fontSize: "16px",
+            cursor: "pointer",
+          }}
+        >
+          Login
+        </button>
       </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "#0f172a",
-    color: "white",
-  },
-  box: {
-    padding: "30px",
-    background: "#1e293b",
-    borderRadius: "12px",
-    width: "300px",
-    textAlign: "center",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "10px",
-    marginTop: "15px",
-  },
-  input: {
-    padding: "10px",
-    borderRadius: "6px",
-    border: "none",
-  },
-  button: {
-    padding: "10px",
-    background: "#38bdf8",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-};
 
 export default Login;
