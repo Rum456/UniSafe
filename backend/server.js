@@ -23,6 +23,14 @@ app.get("/", (req, res) => {
   res.send("Backend working");
 });
 
+
+app.get("/api/profile", async (req, res) => {
+  res.json({
+    message: "Profile API working ✔",
+    user: "test user"
+  });
+});
+
 /* 🔐 REGISTER */
 app.post("/api/register", async (req, res) => {
   try {
